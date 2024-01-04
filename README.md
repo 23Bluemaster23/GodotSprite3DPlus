@@ -1,6 +1,6 @@
 # Sprite3DPlus for Godot
 
-![alt](assets\Animation.gif)
+<img src = "assets/Animation.gif" width = 500px>
 
 this add-on adds two new nodes, the Sprite3DBillBoard node and the SimpleSprite3DBillBoard node, the two nodes will be explained in detail below:
 
