@@ -14,9 +14,14 @@ config/name="Sprite3D Plus"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[editor]
+
+movie_writer/movie_file="D:/intro.avi"
+movie_writer/disable_vsync=true
+
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/extras_sprites/plugin.cfg", "res://addons/snappy/plugin.cfg")
+enabled=PackedStringArray("res://addons/extras_sprites/plugin.cfg")
 
 [rendering]
 

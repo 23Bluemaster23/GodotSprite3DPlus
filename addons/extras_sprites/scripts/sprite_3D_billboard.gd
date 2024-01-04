@@ -9,7 +9,7 @@ class_name Sprite3DBillBoard
 @onready var shader_loc = preload("../shaders/billboard.gdshader")  # Ubicación del shader para el billboard
 
 # Variables de miembro
-var spr_mesh :QuadMesh
+var spr_mesh :PlaneMesh
 var material:ShaderMaterial
 var shader:Shader
 
@@ -100,7 +100,8 @@ func setup_animations():
 
 # Configura la malla
 func setup_mesh():
-	spr_mesh = QuadMesh.new()
+	spr_mesh = PlaneMesh.new()
+	spr_mesh.orientation = PlaneMesh.FACE_Z
 	material = ShaderMaterial.new()
 	material.shader = shader_loc.duplicate()
 	spr_mesh.material = material

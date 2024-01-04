@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_lambert_wrap;
+render_mode diffuse_lambert_wrap,cull_disabled;
 
 uniform float rows:hint_range(1.0, 100.0, 1) = 1;
 uniform float columns:hint_range(1.0, 100.0, 1) = 1;
