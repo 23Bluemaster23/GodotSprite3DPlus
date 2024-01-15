@@ -9,32 +9,45 @@ class_name SimpleSprite3DBillboard
 	set(value):
 		if value != sprite:
 			sprite = value
-			setup_shader()
+			if is_node_ready():
+				setup_shader()
 @export var sprite_scale:float = 0.01:
 	set(value):
 		if value != sprite_scale:
 			sprite_scale = value
-			setup_shader()
+			if is_node_ready():
+				setup_shader()
 var rows:float = 1:
 	set(value):
 		if value != rows:
 			rows = value
-			setup_shader()
-			update_total_frames()
+			if is_node_ready():
+				setup_shader()
+				update_total_frames()
 		notify_property_list_changed()
 var columns:float = 1:
 	set(value):
 		if value != columns:
 			columns = value
-			setup_shader()
-			update_total_frames()
+			if is_node_ready():
+				setup_shader()
+				update_total_frames()
 		notify_property_list_changed()
-var invert_rows_columns:bool
-var mode:int
+var invert_rows_columns:bool:
+	set(value):
+		invert_rows_columns = value
+		if is_node_ready():
+			material.set_shader_parameter("invert_rows_columns",invert_rows_columns)
+var mode:int:
+	set(value):
+		mode = value
+		if is_node_ready():
+			material.set_shader_parameter("mode",mode)
 var frame:float = 0:
 	set(value):
 		frame = value
-		material.set_shader_parameter("frame",frame)
+		if is_node_ready():
+			material.set_shader_parameter("frame",frame)
 var spr_mesh
 var material
 var total_frames

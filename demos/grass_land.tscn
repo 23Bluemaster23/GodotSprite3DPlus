@@ -1,7 +1,6 @@
-[gd_scene load_steps=36 format=3 uid="uid://kkkd51pepclp"]
+[gd_scene load_steps=35 format=3 uid="uid://kkkd51pepclp"]
 
 [ext_resource type="Script" path="res://addons/extras_sprites/scripts/sprite_3D_billboard.gd" id="3_6udd1"]
-[ext_resource type="Texture2D" uid="uid://cm2e7pkrejqt" path="res://demos/assets/Soldier.png" id="4_70o00"]
 [ext_resource type="Script" path="res://addons/extras_sprites/scripts/animatio_data.gd" id="4_rmr2b"]
 [ext_resource type="PackedScene" uid="uid://jqvvan8jdoil" path="res://demos/maps/grass.tscn" id="4_x7twq"]
 [ext_resource type="Texture2D" uid="uid://di5w8ldsma5yn" path="res://demos/assets/mutant.png" id="5_mhp24"]
@@ -10,8 +9,9 @@
 [ext_resource type="Script" path="res://demos/point.gd" id="8_y8rpr"]
 [ext_resource type="Texture2D" uid="uid://ct4mhpnd8xwb7" path="res://icon.svg" id="10_77mxe"]
 [ext_resource type="Script" path="res://addons/extras_sprites/scripts/simple_sprite_3D_billboard.gd" id="10_a7svr"]
+[ext_resource type="Texture2D" uid="uid://bw86v61wtlwk" path="res://demos/assets/testo.png" id="11_ott8g"]
 
-[sub_resource type="Shader" id="Shader_glx3m"]
+[sub_resource type="Shader" id="Shader_arveg"]
 code = "shader_type spatial;
 render_mode diffuse_lambert_wrap,cull_disabled;
 
@@ -86,28 +86,28 @@ void fragment() {
 
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_566fj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_652o2"]
 render_priority = 0
-shader = SubResource("Shader_glx3m")
-shader_parameter/rows = 4.0
-shader_parameter/columns = 8.0
+shader = SubResource("Shader_arveg")
+shader_parameter/rows = 8.0
+shader_parameter/columns = 4.0
 shader_parameter/frame = 1.0
-shader_parameter/invert_rows_columns = false
+shader_parameter/invert_rows_columns = true
 shader_parameter/mode = 0
-shader_parameter/sprite = ExtResource("4_70o00")
+shader_parameter/sprite = ExtResource("5_p7wuy")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_4wn8w"]
-material = SubResource("ShaderMaterial_566fj")
-size = Vector2(0.57, 0.62)
+[sub_resource type="PlaneMesh" id="PlaneMesh_1sfxs"]
+material = SubResource("ShaderMaterial_652o2")
+size = Vector2(0.93, 0.64)
 orientation = 2
 
-[sub_resource type="Resource" id="Resource_dxi1q"]
+[sub_resource type="Resource" id="Resource_530yx"]
 script = ExtResource("4_rmr2b")
 name = "idle"
-sprite = ExtResource("4_70o00")
-rows = 4.0
-columns = 8.0
-invert_rows_columns = false
+sprite = ExtResource("5_p7wuy")
+rows = 8.0
+columns = 4.0
+invert_rows_columns = true
 mode = 0
 
 [sub_resource type="Animation" id="Animation_hwely"]
@@ -172,7 +172,7 @@ _data = {
 "anim": SubResource("Animation_x3cd3")
 }
 
-[sub_resource type="Shader" id="Shader_yw5hr"]
+[sub_resource type="Shader" id="Shader_y7w5t"]
 code = "shader_type spatial;
 render_mode diffuse_lambert_wrap,cull_disabled;
 
@@ -247,108 +247,9 @@ void fragment() {
 
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkg1d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yeta3"]
 render_priority = 0
-shader = SubResource("Shader_yw5hr")
-shader_parameter/rows = 8.0
-shader_parameter/columns = 4.0
-shader_parameter/frame = 1.0
-shader_parameter/invert_rows_columns = true
-shader_parameter/mode = 0
-shader_parameter/sprite = ExtResource("5_p7wuy")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_c4trt"]
-material = SubResource("ShaderMaterial_gkg1d")
-size = Vector2(0.93, 0.64)
-orientation = 2
-
-[sub_resource type="Resource" id="Resource_hhhrv"]
-script = ExtResource("4_rmr2b")
-name = "idle"
-sprite = ExtResource("5_p7wuy")
-rows = 8.0
-columns = 4.0
-invert_rows_columns = true
-mode = 0
-
-[sub_resource type="Shader" id="Shader_6umr4"]
-code = "shader_type spatial;
-render_mode diffuse_lambert_wrap,cull_disabled;
-
-uniform float rows:hint_range(1.0, 100.0, 1) = 1;
-uniform float columns:hint_range(1.0, 100.0, 1) = 1;
-uniform float frame:hint_range(0.0, 100.0, 1) = 0;
-uniform bool invert_rows_columns = false;
-uniform sampler2D sprite:filter_nearest_mipmap;
-uniform int mode:hint_range(0, 1, 1) = 1;
-varying vec3 look_dir;
-
-
-float billboard_mode_a(vec3 CAMERA_POSITION,vec3 NODE_POSITION, mat4 MODEL_MAT,float directions){
-	vec3 direction_to_camera = normalize(CAMERA_POSITION-NODE_POSITION);
-	float angle_to_camera = atan(direction_to_camera.x,direction_to_camera.z);
-	vec4 model_direction = MODEL_MAT*vec4(1.0,0.0,0.0,0.0);
-	float y_angle = atan(model_direction.x,model_direction.z)-PI/2.0;
-	float final_angle = angle_to_camera-y_angle;
-	float int_y_angle = round((final_angle / TAU) * float(directions)) / float(directions);
-	return int_y_angle;
-}
-float billboard_mobe_b(vec3 CAMERA_POSITION,mat4 MODEL_MAT,mat4 VIEW_MAT,float directions,int ret){
-	
-    vec3 ray_origin = CAMERA_POSITION;
-      
-    vec3 object_origin = (MODEL_MAT * vec4(0.0,0.0,0.0,1.0)).xyz;
-    vec3 cam_dir = object_origin - ray_origin;
-    cam_dir = normalize((VIEW_MAT * vec4(cam_dir, 0.0)).xyz);
-
-    float angle = 180.0 - degrees(acos(dot(normalize(cam_dir.xz), normalize(look_dir.xz))));
-    float _direction = round(angle/180.0 * directions);
-
-    float flip = sign((look_dir.x * cam_dir.z) - (look_dir.z * cam_dir.x));
-	
-    flip = mix(flip, 1.0, max(step(_direction, 0.0), step(directions, _direction)));
-	float retu = ret == 0 ? _direction : flip;
-	return retu ;
-}
-void vertex() {
-		 MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);
-		look_dir = MODELVIEW_NORMAL_MATRIX * NORMAL;
-		MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
-	switch (mode){
-		case 0:
-			float y = invert_rows_columns == true ? billboard_mode_a(CAMERA_POSITION_WORLD,NODE_POSITION_WORLD,MODEL_MATRIX,rows) : billboard_mode_a(CAMERA_POSITION_WORLD,NODE_POSITION_WORLD,MODEL_MATRIX,columns);
-			float x = invert_rows_columns == true ? frame/columns:frame/rows;
-			UV /= vec2(rows,columns);
-			UV += invert_rows_columns == true ?vec2(y,x):vec2(x,y);
-			break;	
-		case 1:
-			float x = invert_rows_columns == true ? frame/columns:frame/rows;
-			float y = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,rows,0);
-			float f = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,rows,1);
-			if (invert_rows_columns){
-				y = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,columns,0);
-				f = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,columns,1);
-			}
-			UV.y += invert_rows_columns == true ? x:y;
-			UV /=vec2(rows,columns);
-			UV.x +=  invert_rows_columns == true ? y : x;
-			UV *= invert_rows_columns == true ? vec2(1.0,f):vec2(f,1.0);
-			break;
-	};
-}	
-
-void fragment() {
-	vec4 sprite_texture;
-	sprite_texture = texture(sprite,UV);
-	ALBEDO = sprite_texture.rgb;
-	ALPHA = sprite_texture.a;
-}
-
-"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gqv4t"]
-render_priority = 0
-shader = SubResource("Shader_6umr4")
+shader = SubResource("Shader_y7w5t")
 shader_parameter/rows = 1.0
 shader_parameter/columns = 1.0
 shader_parameter/frame = 0.0
@@ -356,12 +257,12 @@ shader_parameter/invert_rows_columns = false
 shader_parameter/mode = 0
 shader_parameter/sprite = ExtResource("10_77mxe")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_navwf"]
-material = SubResource("ShaderMaterial_gqv4t")
+[sub_resource type="PlaneMesh" id="PlaneMesh_65nqc"]
+material = SubResource("ShaderMaterial_yeta3")
 size = Vector2(0.6, 0.6)
 orientation = 2
 
-[sub_resource type="Resource" id="Resource_msfte"]
+[sub_resource type="Resource" id="Resource_jmp2g"]
 script = ExtResource("4_rmr2b")
 name = "idle"
 sprite = ExtResource("10_77mxe")
@@ -370,7 +271,7 @@ columns = 1.0
 invert_rows_columns = false
 mode = 0
 
-[sub_resource type="Shader" id="Shader_mq48c"]
+[sub_resource type="Shader" id="Shader_qons5"]
 code = "shader_type spatial;
 render_mode diffuse_lambert_wrap,cull_disabled;
 
@@ -445,9 +346,9 @@ void fragment() {
 
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vah3e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rlmbm"]
 render_priority = 0
-shader = SubResource("Shader_mq48c")
+shader = SubResource("Shader_qons5")
 shader_parameter/rows = 4.0
 shader_parameter/columns = 8.0
 shader_parameter/frame = 1.0
@@ -455,12 +356,12 @@ shader_parameter/invert_rows_columns = false
 shader_parameter/mode = 0
 shader_parameter/sprite = ExtResource("5_mhp24")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_7rv1e"]
-material = SubResource("ShaderMaterial_vah3e")
+[sub_resource type="PlaneMesh" id="PlaneMesh_bgchu"]
+material = SubResource("ShaderMaterial_rlmbm")
 size = Vector2(0.93, 0.84)
 orientation = 2
 
-[sub_resource type="Resource" id="Resource_itx32"]
+[sub_resource type="Resource" id="Resource_keld7"]
 script = ExtResource("4_rmr2b")
 name = "idle"
 sprite = ExtResource("5_mhp24")
@@ -469,7 +370,7 @@ columns = 8.0
 invert_rows_columns = false
 mode = 0
 
-[sub_resource type="Shader" id="Shader_kpfyg"]
+[sub_resource type="Shader" id="Shader_lwq6i"]
 code = "shader_type spatial;
 render_mode diffuse_lambert_wrap,cull_disabled;
 
@@ -544,18 +445,18 @@ void fragment() {
 
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_remss"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ijftf"]
 render_priority = 0
-shader = SubResource("Shader_kpfyg")
+shader = SubResource("Shader_lwq6i")
 shader_parameter/rows = 1.0
 shader_parameter/columns = 1.0
-shader_parameter/frame = 3.0
+shader_parameter/frame = 0.0
 shader_parameter/invert_rows_columns = false
 shader_parameter/mode = 0
 shader_parameter/sprite = ExtResource("6_exv84")
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_j20f2"]
-material = SubResource("ShaderMaterial_remss")
+[sub_resource type="PlaneMesh" id="PlaneMesh_dwcua"]
+material = SubResource("ShaderMaterial_ijftf")
 size = Vector2(1.28, 1.74)
 orientation = 2
 
@@ -574,29 +475,103 @@ background_mode = 2
 background_energy_multiplier = 1.48
 sky = SubResource("Sky_ojwwj")
 
-[node name="grass_land" type="Node3D"]
+[sub_resource type="Shader" id="Shader_p0hsv"]
+code = "shader_type spatial;
+render_mode diffuse_lambert_wrap,cull_disabled;
 
-[node name="Sprite3DBillBoard5" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 2.08189e-12, 1.32, 1)
-mesh = SubResource("PlaneMesh_4wn8w")
-script = ExtResource("3_6udd1")
-animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_dxi1q")])
-animation = 0
-frame = 1.0
-sprite_scale = 0.01
+uniform float rows:hint_range(1.0, 100.0, 1) = 1;
+uniform float columns:hint_range(1.0, 100.0, 1) = 1;
+uniform float frame:hint_range(0.0, 100.0, 1) = 0;
+uniform bool invert_rows_columns = false;
+uniform sampler2D sprite:filter_nearest_mipmap;
+uniform int mode:hint_range(0, 1, 1) = 1;
+varying vec3 look_dir;
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite3DBillBoard5"]
-root_node = NodePath("../../Sprite3DBillBoard2")
-libraries = {
-"": SubResource("AnimationLibrary_ij0q8")
+
+float billboard_mode_a(vec3 CAMERA_POSITION,vec3 NODE_POSITION, mat4 MODEL_MAT,float directions){
+	vec3 direction_to_camera = normalize(CAMERA_POSITION-NODE_POSITION);
+	float angle_to_camera = atan(direction_to_camera.x,direction_to_camera.z);
+	vec4 model_direction = MODEL_MAT*vec4(1.0,0.0,0.0,0.0);
+	float y_angle = atan(model_direction.x,model_direction.z)-PI/2.0;
+	float final_angle = angle_to_camera-y_angle;
+	float int_y_angle = round((final_angle / TAU) * float(directions)) / float(directions);
+	return int_y_angle;
 }
-autoplay = "anim"
+float billboard_mobe_b(vec3 CAMERA_POSITION,mat4 MODEL_MAT,mat4 VIEW_MAT,float directions,int ret){
+	
+    vec3 ray_origin = CAMERA_POSITION;
+      
+    vec3 object_origin = (MODEL_MAT * vec4(0.0,0.0,0.0,1.0)).xyz;
+    vec3 cam_dir = object_origin - ray_origin;
+    cam_dir = normalize((VIEW_MAT * vec4(cam_dir, 0.0)).xyz);
+
+    float angle = 180.0 - degrees(acos(dot(normalize(cam_dir.xz), normalize(look_dir.xz))));
+    float _direction = round(angle/180.0 * directions);
+
+    float flip = sign((look_dir.x * cam_dir.z) - (look_dir.z * cam_dir.x));
+	
+    flip = mix(flip, 1.0, max(step(_direction, 0.0), step(directions, _direction)));
+	float retu = ret == 0 ? _direction : flip;
+	return retu ;
+}
+void vertex() {
+		 MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(normalize(cross(vec3(0.0, 1.0, 0.0), INV_VIEW_MATRIX[2].xyz)), 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, vec3(0.0, 1.0, 0.0))), 0.0), MODEL_MATRIX[3]);
+		look_dir = MODELVIEW_NORMAL_MATRIX * NORMAL;
+		MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
+	switch (mode){
+		case 0:
+			float y = invert_rows_columns == true ? billboard_mode_a(CAMERA_POSITION_WORLD,NODE_POSITION_WORLD,MODEL_MATRIX,rows) : billboard_mode_a(CAMERA_POSITION_WORLD,NODE_POSITION_WORLD,MODEL_MATRIX,columns);
+			float x = invert_rows_columns == true ? frame/columns:frame/rows;
+			UV /= vec2(rows,columns);
+			UV += invert_rows_columns == true ?vec2(y,x):vec2(x,y);
+			break;	
+		case 1:
+			float x = invert_rows_columns == true ? frame/columns:frame/rows;
+			float y = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,rows,0);
+			float f = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,rows,1);
+			if (invert_rows_columns){
+				y = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,columns,0);
+				f = billboard_mobe_b(CAMERA_POSITION_WORLD,MODEL_MATRIX,VIEW_MATRIX,columns,1);
+			}
+			UV.y += invert_rows_columns == true ? x:y;
+			UV /=vec2(rows,columns);
+			UV.x +=  invert_rows_columns == true ? y : x;
+			UV *= invert_rows_columns == true ? vec2(1.0,f):vec2(f,1.0);
+			break;
+	};
+}	
+
+void fragment() {
+	vec4 sprite_texture;
+	sprite_texture = texture(sprite,UV);
+	ALBEDO = sprite_texture.rgb;
+	ALPHA = sprite_texture.a;
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ufyq5"]
+render_priority = 0
+shader = SubResource("Shader_p0hsv")
+shader_parameter/rows = 8.0
+shader_parameter/columns = 1.0
+shader_parameter/frame = 0.0
+shader_parameter/invert_rows_columns = true
+shader_parameter/mode = 0
+shader_parameter/sprite = ExtResource("11_ott8g")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_i2qho"]
+material = SubResource("ShaderMaterial_ufyq5")
+size = Vector2(0.648, 0.648)
+orientation = 2
+
+[node name="grass_land" type="Node3D"]
 
 [node name="Sprite3DBillBoard4" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.999839, 0, -0.0179236, 0, 1, 0, 0.0179236, 0, 0.999839, 0, 1.32, -1)
-mesh = SubResource("PlaneMesh_c4trt")
+mesh = SubResource("PlaneMesh_1sfxs")
 script = ExtResource("3_6udd1")
-animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_hhhrv")])
+animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_530yx")])
 animation = 0
 frame = 1.0
 sprite_scale = 0.01
@@ -610,24 +585,23 @@ autoplay = "anim"
 [node name="Sprite3DBillBoard3" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.0857126, 0, -0.99632, 0, 1, 0, 0.99632, 0, 0.0857126, -1.10485, 1.3, 2.08189e-12)
 cast_shadow = 2
-mesh = SubResource("PlaneMesh_navwf")
+mesh = SubResource("PlaneMesh_65nqc")
 script = ExtResource("3_6udd1")
-animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_msfte")])
+animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_jmp2g")])
 animation = 0
 frame = 3.0
 sprite_scale = 0.002
 
 [node name="Sprite3DBillBoard2" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-08, -3.48787e-16, -1, 3.48787e-16, 1, -3.48787e-16, 1, -3.48787e-16, -4.37114e-08, 1, 1.42, 2.08189e-12)
-mesh = SubResource("PlaneMesh_7rv1e")
+mesh = SubResource("PlaneMesh_bgchu")
 script = ExtResource("3_6udd1")
-animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_itx32")])
+animations_array = Array[ExtResource("4_rmr2b")]([SubResource("Resource_keld7")])
 animation = 0
 frame = 1.0
 sprite_scale = 0.01
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite3DBillBoard2"]
-root_node = NodePath("../../Sprite3DBillBoard5")
 libraries = {
 "": SubResource("AnimationLibrary_ij0q8")
 }
@@ -635,7 +609,7 @@ autoplay = "anim"
 
 [node name="SimpleSprite3DBillboard" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08189e-12, 1.892, 2.08189e-12)
-mesh = SubResource("PlaneMesh_j20f2")
+mesh = SubResource("PlaneMesh_dwcua")
 script = ExtResource("10_a7svr")
 sprite = ExtResource("6_exv84")
 sprite_scale = 0.02
@@ -663,3 +637,15 @@ script = ExtResource("8_y8rpr")
 
 [node name="Camera3D" type="Camera3D" parent="point"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45296, 2.21627)
+
+[node name="SimpleSprite3DBillboard2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.324, 0.924194)
+mesh = SubResource("PlaneMesh_i2qho")
+script = ExtResource("10_a7svr")
+sprite = ExtResource("11_ott8g")
+sprite_scale = 0.003
+rows = 8.0
+columns = 1.0
+invert_rows_columns = true
+mode = 0
+frame = 0.0
